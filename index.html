@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>???? ???? ???????</title>
+    <title>موقع فرقة الوشائج</title>
     <style>
         body { font-family: sans-serif; background-color: #f0f2f5; text-align: center; padding: 50px; }
         .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); max-width: 600px; margin: auto; }
@@ -17,42 +17,42 @@
 <body>
 
     <div id="login-screen" class="container">
-        <h2>?? ???? ??? ????? ???????</h2>
-        <input type="password" id="passwordInput" placeholder="???? ???? ?????? ??????">
-        <button onclick="checkPassword()">????</button>
+        <h2>🔒 دخول خاص بفرقة الوشائج</h2>
+        <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور السرية">
+        <button onclick="checkPassword()">دخول</button>
     </div>
 
     <div id="main-content" class="container hidden">
-        <h1>???? ??????? ???????? ??????</h1>
+        <h1>فرقة الوشائج للعلاقات العامة</h1>
         <hr>
         
-        <h3>1. ????? ?????? (?????? ??? ???????)</h3>
-        <input type="text" id="donorName" placeholder="??? ???????">
-        <input type="number" id="donorAmount" placeholder="??????">
-        <button onclick="addDonation()" style="background-color: #28a745;">????? ??????</button>
+        <h3>1. الهرم الشبكي (تبرعات دار المشارق)</h3>
+        <input type="text" id="donorName" placeholder="اسم المتبرع">
+        <input type="number" id="donorAmount" placeholder="المبلغ">
+        <button onclick="addDonation()" style="background-color: #28a745;">تسجيل التبرع</button>
         
         <table>
-            <thead><tr><th>?????</th><th>??????</th></tr></thead>
+            <thead><tr><th>الاسم</th><th>المبلغ</th></tr></thead>
             <tbody id="donationList"></tbody>
         </table>
 
         <hr>
-        <h3>2. ?????? ???????</h3>
+        <h3>2. المهام الثابتة</h3>
         <div id="taskContainer" style="text-align: right;">
-            <div>?? <span id="task1">????? ?????? ???????? ?????? (????)</span> <button onclick="clearTask('task1')">??</button></div>
-            <div>?? <span id="task2">?????? ????????? ????????? (????)</span> <button onclick="clearTask('task2')">??</button></div>
+            <div>📌 <span id="task1">تحديث تقارير العلاقات العامة (شهري)</span> <button onclick="clearTask('task1')">تم</button></div>
+            <div>📌 <span id="task2">متابعة الفعاليات الميدانية (يومي)</span> <button onclick="clearTask('task2')">تم</button></div>
         </div>
     </div>
 
     <script>
-        // ???? ?????? ?????????? ?? 1234 (????? ??????? ???)
+        // كلمة المرور الافتراضية هي 1234 (يمكنك تغييرها هنا)
         function checkPassword() {
             const pw = document.getElementById('passwordInput').value;
-            if(pw === "6789"}  {
+            if(pw === "1234") {
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('main-content').classList.remove('hidden');
             } else {
-                alert("???? ?????? ?????!");
+                alert("كلمة المرور خاطئة!");
             }
         }
 
@@ -67,7 +67,7 @@
 
         function clearTask(id) {
             document.getElementById(id).classList.add('task-done');
-            alert("?? ????? ?????? ????? ??????? ??????");
+            alert("تم تنفيذ المهمة وسيتم تحديثها لاحقاً");
         }
     </script>
 </body>
