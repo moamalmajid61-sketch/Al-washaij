@@ -2,72 +2,197 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>موقع فرقة الوشائج</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منظومة الوشائج الإدارية</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; text-align: center; padding: 50px; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); max-width: 600px; margin: auto; }
-        input, button { padding: 12px; margin: 10px; border-radius: 8px; border: 1px solid #ccc; width: 80%; }
-        button { background-color: #1a73e8; color: white; cursor: pointer; font-weight: bold; }
-        .hidden { display: none; }
-        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 10px; }
-        .task-done { text-decoration: line-through; color: gray; }
+        :root {
+            --primary: #1a2a6c;
+            --accent: #b21f1f;
+            --bg: #f5f7fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 700px;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .login-box, .dashboard { text-align: center; }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .nav-grid button { background: #5d6d7e; font-size: 14px; }
+        .nav-grid button.active { background: var(--accent); }
+        .logout-btn { background: #e74c3c !important; grid-column: span 2; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #fff;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #eee;
+            text-align: center;
+        }
+
+        th { background: #f8f9fa; color: var(--primary); }
+
+        .task-list { text-align: right; }
+        .task-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            background: #fdfdfd;
+            border-right: 4px solid var(--primary);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.02);
+        }
+
+        #errorMsg { color: #e74c3c; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen" class="container">
-        <h2>🔒 دخول خاص بفرقة الوشائج</h2>
-        <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور السرية">
-        <button onclick="checkPassword()">دخول</button>
-    </div>
+    <div class="container">
+        <div id="loginSection" class="login-box">
+            <h1 style="color: var(--primary);">فرقة الوشائج</h1>
+            <p>سجل اسمك للدخول إلى بياناتك</p>
+            <input type="text" id="username" placeholder="اكتب اسمك (أويس، مؤمل، إلخ)">
+            <input type="password" id="password" placeholder="كلمة المرور الموحدة">
+            <button onclick="handleLogin()">دخول النظام</button>
+            <p id="errorMsg">خطأ في الاسم أو كلمة المرور!</p>
+        </div>
 
-    <div id="main-content" class="container hidden">
-        <h1>فرقة الوشائج للعلاقات العامة</h1>
-        <hr>
-        
-        <h3>1. الهرم الشبكي (تبرعات دار المشارق)</h3>
-        <input type="text" id="donorName" placeholder="اسم المتبرع">
-        <input type="number" id="donorAmount" placeholder="المبلغ">
-        <button onclick="addDonation()" style="background-color: #28a745;">تسجيل التبرع</button>
-        
-        <table>
-            <thead><tr><th>الاسم</th><th>المبلغ</th></tr></thead>
-            <tbody id="donationList"></tbody>
-        </table>
+        <div id="dashboardSection" style="display: none;" class="dashboard">
+            <h2 id="welcomeText" style="color: var(--primary);"></h2>
+            
+            <div class="nav-grid">
+                <button onclick="viewPublic()">الهرم العام</button>
+                <button onclick="viewPersonal()">هرمي الخاص</button>
+                <button onclick="viewTasks()">المهام</button>
+                <button class="logout-btn" onclick="location.reload()">تسجيل الخروج</button>
+            </div>
 
-        <hr>
-        <h3>2. المهام الثابتة</h3>
-        <div id="taskContainer" style="text-align: right;">
-            <div>📌 <span id="task1">تحديث تقارير العلاقات العامة (شهري)</span> <button onclick="clearTask('task1')">تم</button></div>
-            <div>📌 <span id="task2">متابعة الفعاليات الميدانية (يومي)</span> <button onclick="clearTask('task2')">تم</button></div>
+            <div id="displayArea">
+                </div>
         </div>
     </div>
 
     <script>
-        // كلمة المرور الافتراضية هي 1234 (يمكنك تغييرها هنا)
-        function checkPassword() {
-            const pw = document.getElementById('passwordInput').value;
-            if(pw === "1234") {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('main-content').classList.remove('hidden');
+        // الإعدادات العامة
+        const GLOBAL_PASSWORD = "123"; // غير كلمة المرور الموحدة من هنا
+
+        // قاعدة بيانات الأهرامات - يمكنك إضافة أي اسم هنا
+        const pyramidsData = {
+            "أويس": [
+                { name: "علي جاسم", note: "تبرع أولي" },
+                { name: "سعدون هاني", note: "مساهمة" }
+            ],
+            "مؤمل": [
+                { name: "حيدر كاظم", note: "تبرع شهري" },
+                { name: "ياسين طه", note: "مساهمة" }
+            ],
+            "أحمد": [
+                { name: "صادق جعفر", note: "مساهمة جديدة" }
+            ]
+            // أضف أي اسم جديد بنفس الطريقة
+        };
+
+        const publicPyramid = [
+            { name: "اللجنة الإدارية", note: "صندوق عام" },
+            { name: "دار المشارق", note: "تبرعات مجمعة" }
+        ];
+
+        const tasks = [
+            "📌 تحديث تقارير العلاقات العامة",
+            "📌 متابعة الفعاليات الميدانية اليومية",
+            "📌 مراجعة سجلات التبرعات"
+        ];
+
+        let loggedInUser = "";
+
+        function handleLogin() {
+            const userInp = document.getElementById("username").value.trim();
+            const passInp = document.getElementById("password").value;
+
+            // التحقق من كلمة المرور الموحدة ووجود الاسم في الداتابيز
+            if (passInp === GLOBAL_PASSWORD && pyramidsData[userInp]) {
+                loggedInUser = userInp;
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("dashboardSection").style.display = "block";
+                document.getElementById("welcomeText").innerText = "أهلاً بك: " + loggedInUser;
+                viewPersonal(); // يفتح هرمه الشخصي فوراً عند الدخول
             } else {
-                alert("كلمة المرور خاطئة!");
+                document.getElementById("errorMsg").style.display = "block";
             }
         }
 
-        function addDonation() {
-            const name = document.getElementById('donorName').value;
-            const amount = document.getElementById('donorAmount').value;
-            if(name && amount) {
-                const row = `<tr><td>${name}</td><td>${amount}</td></tr>`;
-                document.getElementById('donationList').innerHTML += row;
-            }
+        function viewPersonal() {
+            renderTable(`هرم الشخصي: ${loggedInUser}`, pyramidsData[loggedInUser]);
         }
 
-        function clearTask(id) {
-            document.getElementById(id).classList.add('task-done');
-            alert("تم تنفيذ المهمة وسيتم تحديثها لاحقاً");
+        function viewPublic() {
+            renderTable("الهرم العام (المشترك)", publicPyramid);
+        }
+
+        function renderTable(title, data) {
+            let html = `<h3>${title}</h3><table><tr><th>الاسم</th><th>ملاحظات</th></tr>`;
+            data.forEach(item => {
+                html += `<tr><td>${item.name}</td><td>${item.note}</td></tr>`;
+            });
+            html += `</table>`;
+            document.getElementById("displayArea").innerHTML = html;
+        }
+
+        function viewTasks() {
+            let html = `<h3>المهام الثابتة</h3><div class="task-list">`;
+            tasks.forEach(t => {
+                html += `<div class="task-item">${t}</div>`;
+            });
+            html += `</div>`;
+            document.getElementById("displayArea").innerHTML = html;
         }
     </script>
 </body>
