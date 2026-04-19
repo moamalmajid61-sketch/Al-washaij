@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>???? ???? ???????</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f2f5; text-align: center; padding: 50px; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); max-width: 600px; margin: auto; }
+        input, button { padding: 12px; margin: 10px; border-radius: 8px; border: 1px solid #ccc; width: 80%; }
+        button { background-color: #1a73e8; color: white; cursor: pointer; font-weight: bold; }
+        .hidden { display: none; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 10px; }
+        .task-done { text-decoration: line-through; color: gray; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen" class="container">
+        <h2>?? ???? ??? ????? ???????</h2>
+        <input type="password" id="passwordInput" placeholder="???? ???? ?????? ??????">
+        <button onclick="checkPassword()">????</button>
+    </div>
+
+    <div id="main-content" class="container hidden">
+        <h1>???? ??????? ???????? ??????</h1>
+        <hr>
+        
+        <h3>1. ????? ?????? (?????? ??? ???????)</h3>
+        <input type="text" id="donorName" placeholder="??? ???????">
+        <input type="number" id="donorAmount" placeholder="??????">
+        <button onclick="addDonation()" style="background-color: #28a745;">????? ??????</button>
+        
+        <table>
+            <thead><tr><th>?????</th><th>??????</th></tr></thead>
+            <tbody id="donationList"></tbody>
+        </table>
+
+        <hr>
+        <h3>2. ?????? ???????</h3>
+        <div id="taskContainer" style="text-align: right;">
+            <div>?? <span id="task1">????? ?????? ???????? ?????? (????)</span> <button onclick="clearTask('task1')">??</button></div>
+            <div>?? <span id="task2">?????? ????????? ????????? (????)</span> <button onclick="clearTask('task2')">??</button></div>
+        </div>
+    </div>
+
+    <script>
+        // ???? ?????? ?????????? ?? 1234 (????? ??????? ???)
+        function checkPassword() {
+            const pw = document.getElementById('passwordInput').value;
+            if(pw === "6789"}  {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+            } else {
+                alert("???? ?????? ?????!");
+            }
+        }
+
+        function addDonation() {
+            const name = document.getElementById('donorName').value;
+            const amount = document.getElementById('donorAmount').value;
+            if(name && amount) {
+                const row = `<tr><td>${name}</td><td>${amount}</td></tr>`;
+                document.getElementById('donationList').innerHTML += row;
+            }
+        }
+
+        function clearTask(id) {
+            document.getElementById(id).classList.add('task-done');
+            alert("?? ????? ?????? ????? ??????? ??????");
+        }
+    </script>
+</body>
+</html>
